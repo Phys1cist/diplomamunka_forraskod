@@ -1,4 +1,5 @@
 import module
+import module
 from collections import deque
 import newick
 import random as rd
