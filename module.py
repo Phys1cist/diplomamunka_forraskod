@@ -6,7 +6,7 @@ from copy import deepcopy
 import math
 from itertools import chain
 from collections import deque
-
+from itertools import product
 
 
 #ezeket választjuk ki osztódásra: bemenetek: l-kezdeti list, k-hányat választunk ki
@@ -168,9 +168,8 @@ def simulate(to, n, starter_culture, starter_mutation, moran_steps_in_a_year, mu
     mutation_number_expected_value: int, a poisson eloszlás a várható értéke
     rds: list, tartalmazza a random számokat a fa létrehozására
     """
-
+    
     mutate_m = starter_mutation
-    #print('Kezdeti_mut', mutate_m)
     culture = deepcopy(starter_culture)
     branching_buds = []
     #print('Kezdeti populáció:', culture)
@@ -178,43 +177,44 @@ def simulate(to, n, starter_culture, starter_mutation, moran_steps_in_a_year, mu
     if len(culture) == 1:
         culture, mutate_m=propagation(n,culture,mutate_m, mutation_number_expected_value, rds_prop)
     for i in range(moran_steps_in_a_year * lim):
-        print('\n','Populáció a(z)', i+1,'. Moran lépés kezdetén', culture)
+        #print('\n','Populáció a(z)', i+1,'. Moran lépés kezdetén', culture)
+        k = 1
 
         choices = rds.popleft()
-        print('Sorszám osztódásra:',choices)
+        #print('Sorszám osztódásra:',choices)
         duplicated_and_mutated, mutate_m = duplication_and_mutation_100(culture, choices, mutate_m)
-        print('Megkettőződtek és mutáltak',duplicated_and_mutated)
+        #print('Megkettőződtek és mutáltak',duplicated_and_mutated)
 
-        #after_creating_buds = deepcopy(creating_buds_random(duplicated_and_mutated, n, rds_bud)[0])
+        #after_creating_buds = deepcopy(creating_buds_random(duplicated_and_mutated, n)[0])
         #print('Rügyképzés után:',after_creating_buds)  
         #if i == moran_steps_in_a_year * lim - 1:
         #    branching_buds=[deepcopy(creating_buds_random(duplicated_and_mutated, n)[1])]
         v1 , v2 = creating_buds_random(duplicated_and_mutated, n, rds_bud)
         after_creating_buds = deepcopy(v1)
-        print('Rügyképzés után:',after_creating_buds)  
+        #print('Rügyképzés után:',after_creating_buds)  
         if i == moran_steps_in_a_year * lim - 1:
             branching_buds=[deepcopy(v2)]
         culture=deepcopy(after_creating_buds)
     #print('Kimeneti populáció', culture)
-    print('Rügy:', branching_buds)
+    #print('Rügy:', branching_buds)
     next_mutation = mutate_m
     return culture, branching_buds,next_mutation
 
 
-def DFS(        node,
-                n,
-                last_node_name,
-                last_node_children_number,
-                brain_list, 
-                starter_list, 
-                results, 
-                end_of_branch, 
-                moran_steps_in_a_year, 
-                mutation_number_expected_value, 
-                rds, 
-                rds_prop, 
-                rds_bud
-
+def DFS(
+    node,
+    n: int,
+    last_node_name: list,
+    last_node_children_number: int,
+    brain_list: list,
+    starter_list: list,
+    results: list,
+    end_of_branch: list,
+    moran_steps_in_a_year: int,
+    mutation_number_expected_value: float,
+    rds: list,
+    rds_prop: list,
+    rds_bud: list,
 ):
     """
     Ez a fv az all in all, végigmegy az egész fán depth-first search algoritmussal, megcsinál minden Moran-lépést, ágképzést.
@@ -232,14 +232,9 @@ def DFS(        node,
     mutation_number_expected_value: int, a poisson eloszlás a várható értéke
 
     """
-    #print('Hello World')
     lengths = []
-    #print(node)
-    #print('Nód neve:',node.name)
     last_node_name.append(node.name)
-    #print(last_node_name)
     a = node.length
-    #print(a)
     children = node.descendants[::-1]
     last_node_children_number.append(len(children))
 
