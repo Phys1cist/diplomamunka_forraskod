@@ -20,21 +20,21 @@ final_tree_14 = np.zeros((4,7,15))
 final_tree_13 = np.zeros((4,7,15))
 
 M = [1,2,3,4]
-N = [2,4,8,16,32,64,128]
+N = [2,4,6,8,16,32,64]
 
 
 def run(M,N):
 
     for k in M:
         for j in N:
-            d, p, b = module.randoms(n = j, moran_steps = k, num_of_sim = 2)
+            d, p, b = module.randoms(n = j, moran_steps = k, num_of_sim = 800)
             randoms1 = deque([[x] for x in d])
             randoms2 = deque(p)
             randoms3 = deque(b)
 
             tree_13_res = np.zeros(15)
             tree_14_res = np.zeros(15)
-            for i in range(2):
+            for i in range(800):
                 sim = module.DFS(node = Node,
                         n = j,
                         last_node_name = [None],
@@ -54,8 +54,8 @@ def run(M,N):
                 tree_14_res += np.array(module.fun(tree_14_mut))
                 tree_13_res += np.array(module.fun(tree_13_mut))
 
-            avg_tree_14 = tree_14_res/2
-            avg_tree_13 = tree_13_res/2
+            avg_tree_14 = tree_14_res/800
+            avg_tree_13 = tree_13_res/800
             
             w = int(math.log(j,2))-1
             u = k-1
@@ -64,8 +64,16 @@ def run(M,N):
             final_tree_13[u][int(w)] = avg_tree_13
     return final_tree_14, final_tree_13
 
+#start_time = time.time()
 
-start_time = time.time()
-print(run(M,N))
-elapsed_time = time.time() - start_time
-print(elapsed_time)
+res14, res13 = run(M,N)
+with open("tree_14_res.txt", "w") as file:
+    # Write all elements of the list to the file
+    file.write("\n".join(map(str, res14)))
+with open("tree_13_res.txt", "w") as file:
+    # Write all elements of the list to the file
+    file.write("\n".join(map(str, res13)))
+#elapsed_time = time.time() - start_time
+#print(elapsed_time)
+
+
