@@ -27,6 +27,7 @@ def run(M,N):
 
     for k in M:
         for j in N:
+            print('Ezen a paraméterpároson vagyunk: M = ', k, 'n = ', j )
             d, p, b = module.randoms(n = j, moran_steps = k, num_of_sim = 800)
             randoms1 = deque([[x] for x in d])
             randoms2 = deque(p)
