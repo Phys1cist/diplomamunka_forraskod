@@ -7,6 +7,7 @@ import math
 from itertools import chain
 from collections import deque
 from itertools import product
+import pickle
 
 
 #ezeket választjuk ki osztódásra: bemenetek: l-kezdeti list, k-hányat választunk ki
@@ -487,4 +488,15 @@ def randoms(n, moran_steps, num_of_sim):
     bud = rd.choices(range(n), k = 804 * moran_steps * num_of_sim)
 
     return dupl, prop, bud
+
+def save_ndarray(file_name:str, ndarray):
+    with open(file_name, 'wb') as f:
+        pickle.dump(ndarray,f)
+
+def load_ndarray(file_name:str):
+    with open(file_name, 'rb') as f:
+        obj = pickle.load(f)
+        if isinstance(obj, np.ndarray):
+            return obj
+
 

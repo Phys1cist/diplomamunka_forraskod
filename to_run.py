@@ -36,6 +36,7 @@ def run(M,N):
             tree_13_res = np.zeros(15)
             tree_14_res = np.zeros(15)
             for i in range(800):
+                
                 sim = module.DFS(node = Node,
                         n = j,
                         last_node_name = [None],
@@ -68,13 +69,7 @@ def run(M,N):
 #start_time = time.time()
 
 res14, res13 = run(M,N)
-with open("tree_14_res.txt", "w") as file:
-    # Write all elements of the list to the file
-    file.write("\n".join(map(str, res14)))
-with open("tree_13_res.txt", "w") as file:
-    # Write all elements of the list to the file
-    file.write("\n".join(map(str, res13)))
-#elapsed_time = time.time() - start_time
-#print(elapsed_time)
+module.save_ndarray("tree_14_res", res14)
+module.save_ndarray("tree_13_res", res13)
 
 
